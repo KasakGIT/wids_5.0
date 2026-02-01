@@ -1,131 +1,103 @@
-# Mini GPT from Scratch 🧠✨
-
-This project is a **from-scratch implementation of a language model**, built step by step using **PyTorch**.
-
-We start with a **Bigram Language Model** to understand the basics, and then gradually upgrade it into a **GPT-style Transformer model** by adding attention, feedforward layers, and positional embeddings.
 
 ---
 
-## 📁 Project Structure
+## Step 1: Bigram Language Model (`bigram.py`)
 
+The Bigram Language Model predicts the next character using only the current character.
 
----
+### Key Concepts
+- Character-level tokenization  
+- Mapping characters to indices  
+- Embedding lookup tables  
+- Cross-entropy loss computation  
+- Autoregressive text generation  
 
-## 🚀 Step 1: Bigram Language Model (`bigram.py`)
-
-The project begins with a **bigram model**, which predicts the **next character using only the current character**.
-
-### Key ideas:
-- Each character is mapped to an index
-- A lookup table learns probabilities of next characters
-- No context beyond one character
-
-This model helps understand:
-- Tokenization
-- Embeddings
-- Loss calculation
-- Text generation loop
-
-📉 **Limitation:**  
-It has no memory of long-term context, so generated text is mostly random.
+### Limitation
+The model has no memory beyond one character, resulting in largely incoherent text generation.
 
 ---
 
-## 🚀 Step 2: GPT Model (`gpt.py`)
+## Step 2: GPT Model (`gpt.py`)
 
-To overcome the limitations of the bigram model, we upgrade it into a **Transformer-based GPT model**.
+To overcome the limitations of the bigram model, a Transformer-based GPT model is implemented.
 
-The following components are added:
+### Components
 
-### ✅ Head (Single Self-Attention Head)
-- Computes **query, key, and value**
-- Uses masked self-attention
-- Allows each token to attend to previous tokens
+#### Self-Attention Head
+- Computes Query, Key, and Value vectors  
+- Uses causal masking to prevent access to future tokens  
+- Enables context-aware token representations  
 
----
+#### Multi-Head Attention
+- Multiple attention heads operate in parallel  
+- Captures diverse token relationships  
+- Concatenates outputs of all heads  
 
-### ✅ MultiHeadAttention
-- Runs **multiple attention heads in parallel**
-- Captures different relationships between tokens
-- Concatenates outputs of all heads
+#### Feedforward Network
+- Two fully connected layers with non-linear activation  
+- Applied independently to each token  
 
----
+#### Transformer Block
+- Multi-head self-attention  
+- Feedforward network  
+- Residual connections  
+- Layer normalization  
 
-### ✅ FeedForward Network
-- Two linear layers with a non-linearity
-- Applied independently to each token
-- Helps the model learn complex transformations
-
----
-
-### ✅ Transformer Block
-Combines:
-- Multi-head attention
-- Feedforward network
-- Residual connections
-- Layer normalization
-
-This block is stacked multiple times to build depth.
+#### Positional Embeddings
+- Encode token position information  
+- Added to token embeddings to preserve sequence order  
 
 ---
 
-### ✅ Positional Embeddings
-- Adds information about **token order**
-- Necessary because attention alone is position-agnostic
-- Combined with token embeddings
+## Final Model Architecture
+
+The final model consists of token embeddings, positional embeddings, stacked Transformer blocks, and a linear output projection layer.
 
 ---
 
-## 🧠 Final Model Architecture
+## Training
+
+- Dataset: `input.txt`  
+- Objective: Next-character prediction  
+- Loss function: Cross-Entropy Loss  
+- Optimizer: AdamW  
 
 ---
 
-## 🏋️ Training
+## Text Generation
 
-- Model is trained on `input.txt`
-- Uses cross-entropy loss
-- Optimized using AdamW
-- Trained to predict the next character
+After training, the model generates text autoregressively and produces more coherent output compared to the bigram model.
 
 ---
 
-## ✨ Text Generation
+## Key Learnings
 
-After training, the model can:
-- Generate text autoregressively
-- Use learned attention patterns
-- Produce more coherent output than the bigram model
-
----
-
-## 📌 Key Learnings
-
-- Why bigram models are limited
-- How self-attention works
-- Why positional embeddings are required
-- How GPT models generate text
-- How multiple simple blocks combine into a powerful model
+- Limitations of n-gram models  
+- Working of self-attention mechanisms  
+- Importance of positional embeddings  
+- Role of Transformer blocks in language modeling  
 
 ---
 
-## 📚 Inspiration
+## References
 
-Inspired by:
-- Andrej Karpathy’s nanoGPT
-- Transformer architecture from “Attention Is All You Need”
-
----
-
-## 🔧 Requirements
-
-- Python 3.x
-- PyTorch
+- Andrej Karpathy — nanoGPT  
+- Vaswani et al., *Attention Is All You Need*  
 
 ---
 
-## ▶️ How to Run
+## Requirements
+
+- Python 3.x  
+- PyTorch  
+
+---
+
+## How to Run
 
 ```bash
 python bigram.py
 python gpt.py
+
+
 
