@@ -1,103 +1,102 @@
+# miniGPT — Character-Level Language Model in PyTorch
 
----
+Built a decoder-only transformer from scratch in PyTorch, trained on the 
+Tiny Shakespeare dataset. Started with a simple bigram baseline, then 
+incrementally added self-attention, multi-head attention, positional 
+embeddings, and transformer blocks to arrive at a GPT-style architecture.
 
-## Step 1: Bigram Language Model (`bigram.py`)
+## Results
 
-The Bigram Language Model predicts the next character using only the current character.
+**Bigram model** (loss: 4.73 → 2.46, single character context):
+```
+CEThik brid owindakis b, bth
+HAPet bobe d e.
+S:
+O:3 my d?
+```
+No real words, no structure. Model has zero memory beyond one character.
 
-### Key Concepts
-- Character-level tokenization  
-- Mapping characters to indices  
-- Embedding lookup tables  
-- Cross-entropy loss computation  
-- Autoregressive text generation  
+**GPT model** (loss: 4.22 → 1.49, 256 token context, 10.8M parameters):
+```
+ANGELO:
+Why, come, go then; and my lords;
+For I shall saughter; for thou here were so strept,
+Thou dost all men to the babstardness.
 
-### Limitation
-The model has no memory beyond one character, resulting in largely incoherent text generation.
+PAGE:
+Our honest hange, mighty use,
+choosed more again.
+```
+Learned play structure, character names, and dialogue format purely 
+from character-level prediction.
 
----
+## Architecture
+```
+Input tokens
+     ↓
+Token Embeddings + Positional Embeddings
+     ↓
+6x Transformer Blocks:
+   - Multi-Head Self-Attention (6 heads, causal masking)
+   - Feedforward Network (4x hidden dim, ReLU)
+   - Residual connections + Layer Norm
+     ↓
+Linear projection → vocab logits → softmax → next token
+```
 
-## Step 2: GPT Model (`gpt.py`)
+~10.8M parameters total.
 
-To overcome the limitations of the bigram model, a Transformer-based GPT model is implemented.
+## What I learned
 
-### Components
+- Why bigram models fail: no memory beyond one character
+- How Q, K, V work: query asks "what am I looking for",
+  key says "what do I contain", value is what gets passed forward
+- Why positional embeddings are needed: attention has no
+  inherent sense of order
+- How residual connections + layer norm stabilize deep networks
+- Why dropout prevents overfitting in deep architectures
 
-#### Self-Attention Head
-- Computes Query, Key, and Value vectors  
-- Uses causal masking to prevent access to future tokens  
-- Enables context-aware token representations  
+## Files
 
-#### Multi-Head Attention
-- Multiple attention heads operate in parallel  
-- Captures diverse token relationships  
-- Concatenates outputs of all heads  
+| File | Description |
+|------|-------------|
+| `bigram.py` | Baseline bigram model |
+| `gpt.py` | Full GPT implementation |
+| `input.txt` | Tiny Shakespeare dataset |
+| `results/` | Sample generated outputs |
 
-#### Feedforward Network
-- Two fully connected layers with non-linear activation  
-- Applied independently to each token  
+## Hyperparameters (GPT)
 
-#### Transformer Block
-- Multi-head self-attention  
-- Feedforward network  
-- Residual connections  
-- Layer normalization  
+| Parameter | Value |
+|-----------|-------|
+| Context length | 256 tokens |
+| Batch size | 64 |
+| Embedding dim | 384 |
+| Attention heads | 6 |
+| Transformer layers | 6 |
+| Dropout | 0.2 |
+| Optimizer | AdamW (lr=3e-4) |
+| Training steps | 2000 |
 
-#### Positional Embeddings
-- Encode token position information  
-- Added to token embeddings to preserve sequence order  
+## How to run
+```bash
+# Clone the repo
+git clone https://github.com/Kassu-GIT/miniGPT
+cd miniGPT
 
----
+# Install dependencies
+pip install torch
 
-## Final Model Architecture
+# Run bigram baseline
+python bigram.py
 
-The final model consists of token embeddings, positional embeddings, stacked Transformer blocks, and a linear output projection layer.
-
----
-
-## Training
-
-- Dataset: `input.txt`  
-- Objective: Next-character prediction  
-- Loss function: Cross-Entropy Loss  
-- Optimizer: AdamW  
-
----
-
-## Text Generation
-
-After training, the model generates text autoregressively and produces more coherent output compared to the bigram model.
-
----
-
-## Key Learnings
-
-- Limitations of n-gram models  
-- Working of self-attention mechanisms  
-- Importance of positional embeddings  
-- Role of Transformer blocks in language modeling  
-
----
+# Run full GPT
+python gpt.py
+```
 
 ## References
-
-- Andrej Karpathy — nanoGPT  
-- Vaswani et al., *Attention Is All You Need*  
-
----
-
-## Requirements
-
-- Python 3.x  
-- PyTorch  
-
----
-
-## How to Run
-
-```bash
-python bigram.py
-python gpt.py
+- Andrej Karpathy — [Let's build GPT from scratch](https://www.youtube.com/watch?v=kCc8FmEb1nY)
+- Vaswani et al. — [Attention Is All You Need](https://arxiv.org/abs/1706.03762)
 
 
 
