@@ -81,7 +81,7 @@ Linear projection → vocab logits → softmax → next token
 ## How to run
 ```bash
 # Clone the repo
-git clone https://github.com/Kassu-GIT/miniGPT
+git clone https://github.com/KasakGIT/wids_5.0/
 cd miniGPT
 
 # Install dependencies
