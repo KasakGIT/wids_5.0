@@ -1,9 +1,15 @@
 # miniGPT — Character-Level Language Model in PyTorch
 
-Built a decoder-only transformer from scratch in PyTorch, trained on the 
+Built and analyzed a decoder-only transformer from scratch in PyTorch, trained on the 
 Tiny Shakespeare dataset. Started with a simple bigram baseline, then 
 incrementally added self-attention, multi-head attention, positional 
 embeddings, and transformer blocks to arrive at a GPT-style architecture.
+
+## Experiments
+
+- Increasing context length (128 → 256) improved coherence of generated text but increased training time significantly.
+- Reducing number of heads led to poorer attention patterns and more repetitive outputs.
+- Higher dropout (0.3) reduced overfitting but slowed convergence.
 
 ## Results
 
@@ -29,6 +35,12 @@ choosed more again.
 ```
 Learned play structure, character names, and dialogue format purely 
 from character-level prediction.
+
+## Training Observations
+
+- Initial training was unstable with high variance in loss.
+- Model started producing structured text after ~1000 steps.
+- Loss plateaued after ~1800 steps, suggesting need for longer training or tuning.
 
 ## Architecture
 ```
